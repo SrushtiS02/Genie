@@ -16,18 +16,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# --------- Aesthetic Almond-Pink Styling ---------
+# --------- Aesthetic Almond-Pink Styling + Improved Font Color ---------
 st.markdown("""
     <style>
     body, .main, [data-testid="stAppViewContainer"] {
-        background-color: #FAF3EB !important;  /* almond white */
+        background-color: #FAF3EB !important;
     }
     [data-testid="stHeader"] {
         background: linear-gradient(90deg, #FAF3EB 0%, #FCE4EC 100%) !important;
+        color: #242121 !important;
     }
-    h1, h4, .stMarkdown {
+    h1, h4, .stMarkdown, .stText, label, .stFileUploader label, .stFileUploader span {
         font-family: 'Quicksand', 'Segoe UI', sans-serif !important;
-        color: #6B2956 !important;
+        color: #31282b !important; /* deep neutral for better readability */
     }
     .genie-header {
         background: #FCE4EC;
@@ -60,12 +61,12 @@ st.markdown("""
         border: 1.5px solid #FCE4EC;
         padding: 1em 1.1em;
         margin-bottom: 12px;
-        color: #5C5050;
+        color: #2B2430 !important; /* deeper font for result boxes */
         font-size: 1.09em;
     }
     .stButton>button {
         background-color: #A3B18A !important;
-        color: #fff !important;
+        color: #31282b !important;
         border-radius: 7px !important;
         font-weight: 600 !important;
         font-size: 1em !important;
@@ -88,6 +89,20 @@ st.markdown("""
         background: #FAF3EB !important;
         color: #6B2956 !important;
     }
+    /* Stronger font color for answers/suggestions */
+    .genie-answer, .genie-suggestion {
+        color: #242121 !important;
+        font-size: 1.13em;
+        font-weight: 500;
+    }
+    /* Browse files button and upload text */
+    .stFileUploader label, .stFileUploader span {
+        color: #31282b !important;
+        font-size: 1.09em !important;
+        font-weight: 600 !important;
+    }
+    /* Remove Streamlit footer */
+    footer {visibility: hidden;}
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
@@ -129,7 +144,7 @@ with tabs[0]:
                         st.markdown("#### Top Suggestions")
                         for idx, result in enumerate(ab_results):
                             st.markdown(
-                                f"<div class='option-box'><b>Option {chr(65+idx)}:</b> "
+                                f"<div class='option-box genie-suggestion'><b>Option {chr(65+idx)}:</b> "
                                 f"<span style='color:#A3B18A;'>{result['caption']}</span><br>"
                                 f"<b>Engagement:</b> <span style='color:#B9D6DF;'>{format_score(result['score'])}</span><br>"
                                 f"<span style='color:#968E7E;'>{result['why']}</span>"
@@ -138,7 +153,7 @@ with tabs[0]:
                                 unsafe_allow_html=True
                             )
                     else:
-                        st.success(f"“{ideas[0]}”")
+                        st.markdown(f"<div class='genie-answer'>{ideas[0]}</div>", unsafe_allow_html=True)
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
 
@@ -173,7 +188,7 @@ with tabs[1]:
                         ab_results = run_ab_test_simulation(analysis["caption_variations"])
                         for idx, result in enumerate(ab_results):
                             st.markdown(
-                                f"<div class='option-box'><b>Option {chr(65+idx)}:</b> "
+                                f"<div class='option-box genie-suggestion'><b>Option {chr(65+idx)}:</b> "
                                 f"<span style='color:#A3B18A;'>{result['caption']}</span> "
                                 f"(Score: <span style='color:#B9D6DF;'>{format_score(result['score'])}</span>)"
                                 + (" 🌟 <b style='color:#A3B18A;'>Recommended</b>" if result['recommended'] else "")
@@ -199,7 +214,7 @@ with tabs[1]:
                             ab_results = run_ab_test_simulation(suggestion["caption_variations"])
                             for idx, result in enumerate(ab_results):
                                 st.markdown(
-                                    f"<div class='option-box'><b>Option {chr(65+idx)}:</b> "
+                                    f"<div class='option-box genie-suggestion'><b>Option {chr(65+idx)}:</b> "
                                     f"<span style='color:#A3B18A;'>{result['caption']}</span> "
                                     f"(Score: <span style='color:#B9D6DF;'>{format_score(result['score'])}</span>)"
                                     + (" 🌟 <b style='color:#A3B18A;'>Recommended</b>" if result['recommended'] else "")
@@ -236,3 +251,4 @@ with tabs[2]:
     )
     st.markdown("---")
     st.markdown("For support or collaboration, please get in touch.")
+
