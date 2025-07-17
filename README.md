@@ -49,3 +49,11 @@ Whether you're launching a new game night, running a global marketing campaign, 
    ```bash
    git clone https://github.com/SrushtiS02/Genie.git
    cd Genie
+   pip install -r requirements.txt
+  
+2. Create a .env file with your Gemini API key:
+   GEMINI_API_KEY=your_api_key_here
+   
+3. Run the App
+    ```bash
+   streamlit run app.py
